@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: api-gateway
+  session:
+    store-type: redis
+    redis:
+      namespace: session
+      flush-mode: on_save
+  redis:
+    host: localhost
+    port: 6379
+server:
+  port: 8085
+eureka:
+  instance:
+    hostname: ${vcap.application.url[0]:localhost}
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 20
+  client:
+    service-url:
+      defaultZone: http://localhost:9090/eureka
+#Map paths to services
+zuul:
+  prefix: /api
+  ignored-services: "*"
+  routes:
+    # User service :
+    userservice:
+      path: /accounts/**
+      service-id: ms-user
+      url: "http://localhost:8080"
+    # Order service :
+    orderservice:
+      path: /shop/**
+      service-id: ms-order
+      url: "http://localhost:8082"
+    # Catalog service :
+    catalogservice:
+      path: /catalog/**
+      service-id: ms-catalog
+      url: "http://localhost:8083"
+    # Recommendation service :
+    recommendationservice:
+      path: /review/**
+      service-id: ms-recommendation
+      url: "http://localhost:8084"
+
+  sensitive-headers: Set-Cookie,Authorization
+
+
+
