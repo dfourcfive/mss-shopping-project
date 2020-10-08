@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: 'ms-user'
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  datasource:
+    url: jdbc:h2:file:~/users
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    database: h2
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+
+
+server:
+  port: 8080
+eureka:
+  instance:
+    hostname: ${vcap.application.url[0]:localhost}
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 20
+  client:
+    service-url:
+      defaultZone: http://localhost:9090/eureka
